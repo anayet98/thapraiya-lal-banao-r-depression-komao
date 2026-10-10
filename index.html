@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thaprao Gamer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#16102b;--hs:#2ec4b6}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--ink);font-family:Bangers,Impact,"Arial Black",sans-serif;letter-spacing:.04em;user-select:none;-webkit-user-select:none;touch-action:none;-webkit-tap-highlight-color:transparent}
+#app{height:100%;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+#stage{flex:1;position:relative;overflow:hidden;background:repeating-conic-gradient(from 0deg at 50% 55%,#ffe066 0 8deg,#ffb703 8deg 16deg)}
+#stage.flash{background:repeating-conic-gradient(from 0deg at 50% 55%,#ff6b6b 0 8deg,#d00000 8deg 16deg)}
+#g{position:absolute;left:50%;bottom:0;height:88%;width:auto;max-width:100%;transform:translateX(-50%)}
+#hand{position:absolute;left:50%;top:26%;line-height:1;filter:drop-shadow(0 6px 0 rgba(0,0,0,.25));pointer-events:none;will-change:transform}
+#hud{position:absolute;top:8px;left:8px;right:8px;display:flex;gap:6px;justify-content:space-between;font-size:20px;color:var(--ink)}
+#hud>*{background:#fff;border:3px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--ink);padding:2px 9px}
+#mute{font:inherit;cursor:pointer}
+#bubble{position:absolute;left:5%;top:15%;max-width:58%;background:#fff;border:4px solid var(--ink);border-radius:18px;padding:5px 12px;font-size:22px;color:var(--ink);opacity:0;transition:opacity .15s;pointer-events:none}
+#pow,#toast{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);opacity:0;color:#fff;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-shadow:4px 4px 0 var(--ink);white-space:nowrap;pointer-events:none}
+#toast{top:22%;font-size:40px;color:#ffe066}
+.pt{position:absolute;left:0;top:0;font-size:28px;pointer-events:none}
+#bar{position:absolute;left:15%;right:15%;bottom:10px;height:16px;border:3px solid var(--ink);background:#fff;border-radius:10px;overflow:hidden}
+#bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2ec4b6,#ffbe0b,#ff3d81)}
+#shelf{background:var(--ink);padding:6px 8px calc(env(safe-area-inset-bottom,0px) + 8px);text-align:center}
+#next{color:#ffe066;font-size:17px;margin-bottom:6px}
+#slots{display:flex;gap:6px;justify-content:center}
+.slot{flex:1;max-width:46px;aspect-ratio:1;border:3px solid #ffe066;border-radius:10px;display:grid;place-items:center;font-size:22px;filter:grayscale(1);opacity:.45}
+.slot.on{filter:none;opacity:1;background:#ff3d81;border-color:#fff}
+.hs{fill:var(--hs)}.hl{stroke:var(--hs)}
+#eH,#eD,#mH,#mD{display:none}
+svg[data-s=hit] #eN,svg[data-s=hit] #mI,svg[data-s=dizzy] #eN,svg[data-s=dizzy] #mI{display:none}
+svg[data-s=hit] #eH,svg[data-s=hit] #mH,svg[data-s=dizzy] #eD,svg[data-s=dizzy] #mD{display:inline}
+</style>
+</head>
+<body>
+<div id="app">
+ <div id="stage">
+  <svg id="g" viewBox="0 0 300 360" data-s="idle">
+   <g stroke="#16102b" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="40" y="170" width="220" height="200" rx="40" fill="#3a2d6b"/>
+    <path d="M70 360 Q80 270 150 262 Q220 270 230 360Z" fill="#ff3d81"/>
+    <rect x="130" y="224" width="40" height="44" fill="#e8b88a"/>
+    <g id="head" style="transform-origin:150px 240px">
+     <rect x="80" y="90" width="140" height="150" rx="62" fill="#ffd9b0"/>
+     <path d="M78 140 Q80 70 150 68 Q222 70 222 140 Q190 100 150 104 Q110 100 78 140Z" fill="#2b1b17"/>
+     <path class="hl" d="M72 150 Q72 60 150 60 Q228 60 228 150" fill="none" stroke-width="10"/>
+     <rect class="hs" x="62" y="136" width="22" height="46" rx="10"/>
+     <rect class="hs" x="216" y="136" width="22" height="46" rx="10"/>
+     <path class="hl" d="M72 180 Q76 212 112 214" fill="none" stroke-width="6"/>
+     <circle class="hs" cx="116" cy="214" r="7"/>
+     <g id="eN"><circle cx="124" cy="150" r="14" fill="#fff"/><circle cx="127" cy="152" r="6" fill="#16102b" stroke="none"/><circle cx="176" cy="150" r="14" fill="#fff"/><circle cx="173" cy="152" r="6" fill="#16102b" stroke="none"/></g>
+     <path id="eH" d="M108 140 L136 152 L108 164 M192 140 L164 152 L192 164" fill="none"/>
+     <g id="eD" stroke="none" font-size="38" text-anchor="middle" fill="#16102b"><text x="124" y="164">@</text><text x="176" y="164">@</text></g>
+     <path id="mI" d="M128 206 Q150 220 172 206" fill="none"/>
+     <ellipse id="mH" cx="150" cy="210" rx="20" ry="15" fill="#8b1e3f"/>
+     <path id="mD" d="M124 210 Q137 200 150 210 T176 210" fill="none"/>
+     <ellipse id="ck" cx="196" cy="188" rx="26" ry="20" fill="#e5383b" stroke="none" opacity="0"/>
+     <text id="crown" x="150" y="76" font-size="62" text-anchor="middle" stroke="none" style="display:none">👑</text>
+    </g>
+    <rect x="108" y="300" width="84" height="34" rx="14" fill="#16102b"/>
+    <circle cx="98" cy="318" r="18" fill="#ffd9b0"/><circle cx="202" cy="318" r="18" fill="#ffd9b0"/>
+   </g>
+  </svg>
+  <div id="hand">🖐️</div>
+  <div id="hud"><div>Slaps <b id="h1">0</b></div><div>Combo <b id="h2">-</b></div><div>Rank <b id="h3">Pro</b></div><button id="mute">🔊</button></div>
+  <div id="bubble"></div><div id="pow"></div><div id="toast"></div>
+  <div id="bar"><i></i></div>
+ </div>
+ <div id="shelf"><div id="next"></div><div id="slots"></div></div>
+</div>
+<script>
+const $=id=>document.getElementById(id),stage=$('stage'),hand=$('hand'),svg=$('g'),head=$('head'),bar=$('bar').firstElementChild;
+const GIFTS=[
+{e:'🍕',n:'Pizza',f:'total',g:10},{e:'🎧',n:'Gold Headset',f:'total',g:30},{e:'🔥',n:'Fire Hand',f:'best',g:10},
+{e:'🧸',n:'Teddy',f:'total',g:75},{e:'💪',n:'Gym Arm',f:'perfect',g:5},{e:'🏆',n:'Trophy',f:'total',g:150},
+{e:'⚡',n:'Thunder',f:'best',g:25},{e:'👑',n:'Crown',f:'total',g:300},{e:'🚀',n:'Rocket',f:'perfect',g:30}];
+const DESC={total:'slaps',best:'combo',perfect:'full-power slaps'};
+const R=['Pro','Gold','Silver','Bronze','Noob','Bot','Alu'];
+const LOW=['Ei! Match cholchhe!','Lag! Eta lag!','Ping 999 😭','Ami toh pro!','Abar?!'];
+const HIGH=['AAAAA!','Ogo maa!','Rank gelo!','Wi-Fi gelo!','Mummy dekho!'];
+let S={total:0,best:0,perfect:0,got:[]};
+try{Object.assign(S,JSON.parse(localStorage.getItem('thaprao')||'{}'))}catch(e){}
+GIFTS.forEach((x,i)=>{const d=document.createElement('div');d.id='s'+i;d.title=x.n;$('slots').appendChild(d)});
+
+let combo=0,last=0,heat=0,charging=false,busy=false,t0=0,mute=false,ac,bt;
+const sw=()=>stage.clientWidth;
+const T=(x,y,r)=>`translate(calc(-50% + ${x}px),${y}px) rotate(${r}deg)`;
+const setHand=(x,y,r)=>hand.style.transform=T(x,y,r);
+function size(){hand.style.fontSize=Math.min(sw()*.5,230)+'px'}
+addEventListener('resize',size);size();
+
+function A(){if(!ac)try{ac=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}if(ac&&ac.state==='suspended')ac.resume();return ac}
+function tone(f0,f1,d,type,v){const a=A();if(!a||mute)return;const t=a.currentTime,o=a.createOscillator(),k=a.createGain();o.type=type;o.frequency.setValueAtTime(f0,t);o.frequency.linearRampToValueAtTime(f1,t+d);k.gain.setValueAtTime(v,t);k.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(k).connect(a.destination);o.start(t);o.stop(t+d)}
+function slapSnd(p){const a=A();if(!a||mute)return;const t=a.currentTime,n=a.createBufferSource(),len=a.sampleRate*.15,b=a.createBuffer(1,len,a.sampleRate),d=b.getChannelData(0);
+ for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);
+ n.buffer=b;const f=a.createBiquadFilter();f.type='bandpass';f.frequency.value=1500+p*1500;const v=a.createGain();v.gain.value=.6+p*.8;
+ n.connect(f).connect(v).connect(a.destination);n.start(t);tone(180,50,.12,'sine',.7)}
+
+function say(t){const b=$('bubble');b.textContent=t;b.style.opacity=1;clearTimeout(bt);bt=setTimeout(()=>b.style.opacity=0,1400)}
+function fx(txt,x,y,dx,dy,dur){const s=document.createElement('span');s.className='pt';s.textContent=txt;stage.appendChild(s);
+ s.animate([{transform:`translate(${x}px,${y}px) scale(.6)`,opacity:1},{transform:`translate(${x+dx}px,${y+dy}px) rotate(${dx}deg) scale(1.2)`,opacity:.9}],{duration:dur,easing:'ease-out'}).onfinish=()=>s.remove()}
+function refresh(){
+ $('h1').textContent=S.total;$('h2').textContent=combo>1?'x'+combo+(combo>=10?'🔥':''):'-';$('h3').textContent=R[Math.min(6,S.total/20|0)];
+ GIFTS.forEach((x,i)=>{const s=$('s'+i),on=S.got.includes(x.e);s.className='slot'+(on?' on':'');s.textContent=on?x.e:'❓'});
+ const nx=GIFTS.find(x=>!S.got.includes(x.e));
+ $('next').textContent=nx?`Next gift: ${nx.e} ${nx.n} — ${Math.min(S[nx.f],nx.g)}/${nx.g} ${DESC[nx.f]}`:'Sob gift pelen! Apni Slap Legend 🏅';
+ document.documentElement.style.setProperty('--hs',S.got.includes('🎧')?'#ffbe0b':'#2ec4b6');
+ $('crown').style.display=S.got.includes('👑')?'inline':'none'}
+
+function unlock(x){
+ S.got.push(x.e);const t=$('toast');t.textContent=`🎁 ${x.e} ${x.n}!`;t.style.fontSize='44px';
+ t.animate([{opacity:1,transform:'translate(-50%,-50%) scale(.2)'},{opacity:1,transform:'translate(-50%,-50%) scale(1.2)',offset:.2},{opacity:1,transform:'translate(-50%,-50%) scale(1)',offset:.8},{opacity:0,transform:'translate(-50%,-50%) scale(1)'}],{duration:2200});
+ for(let i=0;i<22;i++)fx(i%3?x.e:'🎉',Math.random()*sw(),-40,(Math.random()-.5)*80,stage.clientHeight+80,1400+Math.random()*1200);
+ [523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,f,.18,'square',.08),i*110));
+ setTimeout(()=>say('Dhonnobad bhai 🥹'),500)}
+
+function slap(p){
+ const now=performance.now(),perfect=p>=.97,w=sw();
+ combo=now-last<1300?combo+1:1;last=now;
+ S.total++;S.best=Math.max(S.best,combo);if(perfect)S.perfect++;
+ heat=Math.min(1.5,heat+.2+p*.5);
+ slapSnd(p);setTimeout(()=>tone(450+Math.random()*250,800+p*600,.22,'sawtooth',.1),60);
+ head.animate([{transform:'none'},{transform:`translate(${-26*p-6}px,4px) rotate(${-16*p-6}deg)`,offset:.25},{transform:`translate(${6*p}px,0) rotate(${3*p}deg)`,offset:.6},{transform:'none'}],{duration:450+300*p,easing:'ease-out'});
+ const a=(Math.random()-.5)*30*p;stage.animate([{transform:'none'},{transform:`translate(${a}px,${-a}px)`},{transform:'none'}],{duration:200});
+ stage.classList.add('flash');setTimeout(()=>stage.classList.remove('flash'),90);
+ const words=p<.35?['pat','tap','paf']:p<.8?['SLAP!','CHOT!','THAS!']:['KA-POW!','BOOM!','THAPPOR!','CHOTAAAK!'];
+ const el=$('pow'),r=(Math.random()-.5)*30;el.textContent=words[Math.random()*words.length|0];el.style.fontSize=(38+p*70)+'px';
+ el.animate([{transform:`translate(-50%,-50%) scale(.3) rotate(${r}deg)`,opacity:1},{transform:`translate(-50%,-50%) scale(1.15) rotate(${r}deg)`,opacity:1,offset:.25},{transform:`translate(-50%,-80%) scale(1) rotate(${r}deg)`,opacity:0}],{duration:750});
+ const n=3+Math.round(p*8),em=['💢','⭐','💦','🦷','✨'];
+ for(let i=0;i<n;i++)fx(em[i%5],w/2,stage.clientHeight*.45,(Math.random()-.7)*220*(.5+p),(Math.random()-.8)*200,600+Math.random()*400);
+ say((p>.7?HIGH:LOW)[Math.random()*5|0]);
+ svg.dataset.s='hit';setTimeout(()=>svg.dataset.s=combo>=8?'dizzy':'idle',380);
+ GIFTS.forEach(x=>{if(!S.got.includes(x.e)&&S[x.f]>=x.g)unlock(x)});
+ try{localStorage.setItem('thaprao',JSON.stringify(S))}catch(e){}
+ refresh()}
+
+function press(){if(charging)return;A();charging=true;t0=performance.now()}
+function release(){
+ if(!charging)return;charging=false;
+ const p=Math.max(.12,Math.min(1,(performance.now()-t0)/700)),w=sw();bar.style.width=0;busy=true;
+ hand.animate([{transform:T(w*(.34-.06*p),-10-p*20,16+p*38)},{transform:T(w*.04,-4,-8),offset:.3},{transform:T(-w*.1,10,-24),offset:.5},{transform:T(w*.8,0,20)}],{duration:380,easing:'ease-in'}).onfinish=()=>busy=false;
+ setTimeout(()=>slap(p),110)}
+stage.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;press()});
+addEventListener('pointerup',release);addEventListener('pointercancel',release);
+addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();if(!e.repeat)press()}});
+addEventListener('keyup',e=>{if(e.code==='Space')release()});
+$('mute').addEventListener('click',e=>{mute=!mute;e.target.textContent=mute?'🔇':'🔊'});
+
+function loop(now){
+ const w=sw();
+ if(charging){const p=Math.min(1,(now-t0)/700);bar.style.width=p*100+'%';setHand(w*(.34-.06*p),-10-p*20,16+p*38)}
+ else if(!busy)setHand(w*.8,0,20);
+ heat=Math.max(0,heat-.012);$('ck').style.opacity=Math.min(.85,heat);
+ if(combo&&now-last>1300){combo=0;svg.dataset.s='idle';refresh()}
+ requestAnimationFrame(loop)}
+refresh();say('Dhore rakho, charge hobe 😈');requestAnimationFrame(loop);
+</script>
+</body>
+</html>
